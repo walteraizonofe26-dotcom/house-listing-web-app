@@ -4,6 +4,7 @@ import { CiLock } from "react-icons/ci";
 import { MdAddAlert } from "react-icons/md";
 import { MdOutlineSyncAlt } from "react-icons/md";
 import { CiCircleList } from "react-icons/ci";
+import Link from "next/link";
 
 export default function Signup(){
     return(
@@ -68,7 +69,7 @@ export default function Signup(){
                  <button type="submit" className="mt-6 bg-red-700 hover:bg-red-800 text-white px-8 py-3 rounded-sm ">Sign up</button>
             </div>
          <div className="text-center pt-4">
-            <h1>Already Registered user? <a className="text-red-400 cursor-pointer">Login</a></h1>
+            <h1>Already Registered user? <Link href="/login_page" className="text-red-400 cursor-pointer">Login</Link></h1>
          </div>
         </form>
        </div>

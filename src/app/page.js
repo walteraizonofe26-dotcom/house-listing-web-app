@@ -7,7 +7,7 @@ import { FaHouseUser } from "react-icons/fa";
 import { IoHome } from "react-icons/io5";
 import { FaBookOpen } from "react-icons/fa";
 import { MdPriceChange } from "react-icons/md";
-
+import Link from "next/link";
 
 export default function Home() {
   return (

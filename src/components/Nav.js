@@ -1,7 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-
-
 import { MdAccountCircle, MdOutlineAccountCircle } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaFacebookSquare } from "react-icons/fa";
@@ -20,11 +18,11 @@ export default function Nav() {
   <div className=" flex bg-black ">
     <div className="flex justify-between items-center w-full mx-10">
         <div className="flex gap-6 p-4">
-        <Link href="/login" className="flex items-center gap-2 text-white">
+        <Link href="/login_page" className="flex items-center gap-2 text-white">
           <MdAccountCircle size={14} />
           <span>Login</span>
         </Link>
-        <Link href="/register" className="flex items-center gap-2 text-white">
+        <Link href="/signup" className="flex items-center gap-2 text-white">
           <MdOutlineAccountCircle size={14} />
           <span>Register</span>
         </Link>
