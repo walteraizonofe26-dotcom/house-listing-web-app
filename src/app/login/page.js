@@ -1,144 +1,368 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
-import { FaFacebookF, FaGoogle } from "react-icons/fa";
 
-export default function Login() {
-  const [values, setValues] = useState({ email: "", password: "" });
-  const [remember, setRemember] = useState(false);
-  const [errors, setErrors] = useState({});
+const API = "http://property.reworkstaging.name.ng/v1";
 
-  function handleChange(e) {
-    setValues({ ...values, [e.target.name]: e.target.value });
+function getToken(result) {
+  const candidates = [
+    result,
+    result?.data,
+    result?.data?.data,
+    result?.result,
+    result?.result?.data,
+    result?.account,
+    result?.user,
+    result?.customer,
+    result?.merchant,
+    result?.agent,
+  ];
+
+  for (const item of candidates) {
+    if (!item || typeof item !== "object") continue;
+
+    const token = item.token || item.access_token || item.accessToken;
+
+    if (typeof token === "string" && token.trim()) {
+      return token.trim();
+    }
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  return "";
+}
 
-    const errs = {};
-    if (!values.email.trim()) errs.email = "Email cannot be blank.";
-    else if (!/^\S+@\S+\.\S+$/.test(values.email)) errs.email = "Enter a valid email.";
-    if (!values.password) errs.password = "Password cannot be blank.";
+function getAccount(result) {
+  const candidates = [
+    result?.data?.data,
+    result?.data,
+    result?.result?.data,
+    result?.result,
+    result?.account,
+    result?.user,
+    result?.customer,
+    result?.merchant,
+    result?.agent,
+  ];
 
-    setErrors(errs);
+  for (const item of candidates) {
+    if (
+      item &&
+      typeof item === "object" &&
+      !Array.isArray(item) &&
+      (
+        item.id ||
+        item._id ||
+        item.user_id ||
+        item.userId ||
+        item.merchant_id ||
+        item.agent_id ||
+        item.email
+      )
+    ) {
+      return item;
+    }
+  }
 
-    if (Object.keys(errs).length === 0) {
-      // send values (and remember) to your backend here
-      console.log("Login:", values, "Remember:", remember);
+  return result;
+}
+
+function getId(account) {
+  return (
+    account?.merchant_id ??
+    account?.merchantId ??
+    account?.agent_id ??
+    account?.agentId ??
+    account?.user_id ??
+    account?.userId ??
+    account?.id ??
+    account?._id ??
+    account?.user?.id ??
+    account?.customer?.id ??
+    ""
+  );
+}
+
+function LoginForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const requestedRole = searchParams.get("role");
+
+  const [role, setRole] = useState(
+    ["merchant", "agent", "user"].includes(requestedRole)
+      ? requestedRole
+      : "merchant"
+  );
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    if (loading) return;
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(`${API}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email.trim(),
+          password: formData.password,
+        }),
+      });
+
+      const responseText = await response.text();
+
+      let result = {};
+
+      try {
+        result = responseText ? JSON.parse(responseText) : {};
+      } catch {
+        throw new Error(
+          "The server returned an unexpected response. Please check the login API endpoint."
+        );
+      }
+
+      const responseCode = Number(result?.code);
+
+      if (
+        !response.ok ||
+        (Number.isFinite(responseCode) &&
+          responseCode >= 400) ||
+        ["BAD_REQUEST", "UNAUTHORIZED", "TOKEN_EXPIRED"].includes(
+          result?.type
+        )
+      ) {
+        throw new Error(
+          result?.msg ||
+            result?.message ||
+            result?.error?.message ||
+            `Login failed (${response.status}).`
+        );
+      }
+
+      const token = getToken(result);
+      const account = getAccount(result);
+
+      if (!token) {
+        throw new Error(
+          "The login response did not contain an access token. Please check the API response."
+        );
+      }
+
+      if (
+        !account ||
+        typeof account !== "object" ||
+        Array.isArray(account)
+      ) {
+        throw new Error("The API returned invalid account information.");
+      }
+
+      const accountId = getId(account);
+
+      const savedAccount = {
+        ...account,
+        role,
+      };
+
+      // Clear data belonging to the previous account.
+      const keysToClear = [
+        "token",
+        "role",
+        "account",
+        "merchantId",
+        "agentId",
+        "userId",
+        "merchant",
+        "agent",
+        "user",
+      ];
+
+      keysToClear.forEach((key) => {
+        localStorage.removeItem(key);
+      });
+
+      // Save the new account and token.
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("account", JSON.stringify(savedAccount));
+
+      if (accountId) {
+        if (role === "merchant") {
+          localStorage.setItem("merchantId", String(accountId));
+          localStorage.setItem("merchant", JSON.stringify(savedAccount));
+        } else if (role === "agent") {
+          localStorage.setItem("agentId", String(accountId));
+          localStorage.setItem("agent", JSON.stringify(savedAccount));
+        } else {
+          localStorage.setItem("userId", String(accountId));
+          localStorage.setItem("user", JSON.stringify(savedAccount));
+        }
+      }
+
+      console.log("Login successful.");
+      console.log("Selected role:", role);
+      console.log("Account ID found:", Boolean(accountId));
+
+      // Redirect each role to its own destination.
+      if (role === "merchant") {
+        router.replace("/dashboard/merchant");
+      } else if (role === "agent") {
+        router.replace("/dashboard/agent");
+      } else {
+        router.replace("/All-property");
+      }
+    } catch (err) {
+      setError(
+        err.message || "Unable to log in. Please try again."
+      );
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <section>
-      <Nav />
+    <main className="flex min-h-screen items-center justify-center bg-gray-100 px-4 py-10">
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
+        <h1 className="mb-2 text-center text-3xl font-bold text-gray-900">
+          Welcome Back
+        </h1>
 
-      <div className="max-w-xl mx-auto my-8 px-6">
-        <h1 className="text-3xl font-bold mb-4 text-center">Log In Your Account</h1>
-        <p className="pb-5 text-center border-b border-gray-300">
-          Please enter your Email and Password
+        <p className="mb-7 text-center text-gray-500">
+          Login to your PropertyHub account.
         </p>
 
-        <form onSubmit={handleSubmit} noValidate className="pt-6">
-          {/* Email */}
-          <label htmlFor="email" className="block mb-1">
-            Email<span className="text-red-600">*</span>
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={values.email}
-            onChange={handleChange}
-            className={`w-full border p-2 rounded-sm ${errors.email ? "border-red-600" : "border-gray-400"}`}
-          />
-          {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
-
-          {/* Password */}
-          <label htmlFor="password" className="block mb-1 mt-5">
-            Password<span className="text-red-600">*</span>
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={values.password}
-            onChange={handleChange}
-            className={`w-full border p-2 rounded-sm ${errors.password ? "border-red-600" : "border-gray-400"}`}
-          />
-          {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>}
-
-          {/* Remember me + forgot password */}
-          <div className="flex items-center justify-between mt-4">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={remember}
-                onChange={(e) => setRemember(e.target.checked)}
-              />
-              Remember Me
-            </label>
-            <Link href="/forgot-password" className="text-red-700 hover:underline">
-              Forgot Your Password?
-            </Link>
-          </div>
-
-          {/* Login button */}
-          <div className="text-center">
-            <button
-              type="submit"
-              className="mt-6 bg-red-700 hover:bg-red-800 text-white font-bold px-8 py-3 rounded-sm"
-            >
-              Login
-            </button>
-          </div>
-
-          {/* OR divider */}
-          <div className="flex items-center gap-4 my-8">
-            <div className="flex-1 border-t border-gray-300" />
-            <span className="text-sm">OR</span>
-            <div className="flex-1 border-t border-gray-300" />
-          </div>
-
-          <p className="text-center mb-5">Log In using one of the following social services:</p>
-
-          {/* Social buttons */}
-          <div className="flex flex-wrap justify-center gap-4">
-            <button
-              type="button"
-              className="flex items-center gap-3 bg-[#3b5998] hover:opacity-90 text-white font-bold text-lg px-5 py-3 rounded-full"
-            >
-              <span className="bg-[#2d4373] p-2 rounded-full">
-                <FaFacebookF />
-              </span>
-              Facebook Login
-            </button>
-            <button
-              type="button"
-              className="flex items-center gap-3 bg-[#dd4b39] hover:opacity-90 text-white font-bold text-lg px-5 py-3 rounded-full"
-            >
-              <span className="bg-[#a33a2c] p-2 rounded-full">
-                <FaGoogle />
-              </span>
-              Google Login
-            </button>
-          </div>
-
-          {/* Register link */}
-          <p className="text-center mt-8 pt-4 border-t border-gray-200">
-            Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-red-700 hover:underline">
-              Register
-            </Link>
+        {error && (
+          <p
+            role="alert"
+            className="mb-4 rounded-lg bg-red-100 p-3 text-sm text-red-700"
+          >
+            {error}
           </p>
-        </form>
-      </div>
+        )}
 
-      <Footer />
-    </section>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label
+              htmlFor="role"
+              className="mb-2 block font-medium text-gray-700"
+            >
+              Login as
+            </label>
+
+            <select
+              id="role"
+              value={role}
+              onChange={(event) => {
+                setRole(event.target.value);
+                setError("");
+              }}
+              className="w-full rounded-lg border border-gray-300 p-3"
+            >
+              <option value="merchant">Merchant</option>
+              <option value="agent">Agent</option>
+              <option value="user">Customer / User</option>
+            </select>
+          </div>
+
+          <div>
+            <label
+              htmlFor="email"
+              className="mb-2 block font-medium text-gray-700"
+            >
+              Email address
+            </label>
+
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
+              autoComplete="email"
+              required
+              className="w-full rounded-lg border border-gray-300 p-3 outline-none focus:border-blue-600"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="password"
+              className="mb-2 block font-medium text-gray-700"
+            >
+              Password
+            </label>
+
+            <input
+              id="password"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Enter your password"
+              autoComplete="current-password"
+              required
+              className="w-full rounded-lg border border-gray-300 p-3 outline-none focus:border-blue-600"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {loading ? "Signing in..." : "Login"}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-gray-600">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/register"
+            className="font-semibold text-blue-600 hover:underline"
+          >
+            Register here
+          </Link>
+        </p>
+      </div>
+    </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-gray-100">
+          <p className="text-gray-600">Loading login...</p>
+        </main>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }
