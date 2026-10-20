@@ -60,12 +60,12 @@ export default function Nav() {
      </div>
   <div>
     <ul className="flex gap-6 justify-center items-center text-black font-bold mx-20 cursor-pointer">
-        <li>BUY</li>
-        <li>SELL</li>
-        <li>RENT</li>
-        <li>FIND AGENT</li>
-        <li>NEWS & ADVICES</li>
-        <li>CONTACT US</li>
+        <Link href="/shop_page"><li>BUY</li></Link>
+        <Link href="/shop_page"><li>SELL</li></Link>
+        <Link href="/shop_page"><li>RENT</li></Link>
+        <Link href="#"><li>FIND AGENT</li></Link>
+        <Link href="#"><li>NEWS & ADVICES</li></Link>
+        <Link href="#"><li>CONTACT US</li></Link>
     </ul>
   </div>
  </div>
