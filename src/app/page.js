@@ -2,7 +2,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import Shop from "../app/shop_page/page";
+// import Shop from "../app/shop_page/page";
 import { FaHouseUser } from "react-icons/fa";
 import { IoHome } from "react-icons/io5";
 import { FaBookOpen } from "react-icons/fa";
@@ -18,10 +18,10 @@ export default function Home() {
         <p className="pb-3 text-white">There are millions of home out there. Let's find the one that's the perfect one for you.  </p>
         <div className="bg-gray-600 align-center  justify-self-center px-10 py-10">
           <div className="flex justify-items-center pt-2 gap-2 align-center px-6">
-            <div className="bg-black text-white px-10"><h4>BUY</h4></div>
-            <div className="bg-black text-white px-10"><h4>RENT</h4></div>
-            <div className="bg-black text-white px-10"><h4>SHORT LET</h4></div>
-            <div className="bg-black text-white px-10"><h4>PROJECTS</h4></div>
+            <div className="bg-black text-white px-10"><Link href="/shop_page"><h4>BUY</h4></Link></div>
+            <div className="bg-black text-white px-10"><Link href="/shop_page"><h4>RENT</h4></Link></div>
+            <div className="bg-black text-white px-10"><Link href="/shop_page"><h4>SHORT LET</h4></Link></div>
+            <div className="bg-black text-white px-10"><Link href="/shop_page"><h4>PROJECTS</h4></Link></div>
           </div>
           <div className="flex p-4 gap-3">
           <input type="text" placeholder="Pls enter Area, Town, State" className="flex-1 p-3 rounded-sm outline-none bg-white"/>
@@ -84,7 +84,7 @@ export default function Home() {
 
   </div>
      </section>
-     <Shop />
+     {/* <Shop/> */}
 
      <section className="bg-gray-100 px-4 py-10 md:px-16 lg:px-24">
        <div className="mx-auto max-w-7xl border border-gray-200 bg-white p-5 shadow-sm text-center">
