@@ -19,7 +19,7 @@ export default function PropertyDetailsPage() {
   // useEffect(() => {
   //   async function fetchProperty() {
   //     // 1. Get token via POST http://property.reworkstaging.name.ng/v1/token
-  //     // 2. Fetch GET http://property.reworkstaging.name.ng/v1/properties/PROPERTY_ID
+  //     // 2. Fetch GET http://property.reworkstaging.`  name.ng/v1/properties/PROPERTY_ID
   //   }
   //   fetchProperty();
   // }, [propertyId]);
