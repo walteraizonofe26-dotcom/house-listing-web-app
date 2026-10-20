@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getCart, saveCart } from "@/utils/propertyHelper";
-import Nav from "@/components/Nav"
+// import Nav from "@/components/Nav"
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -37,7 +37,7 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-        <Nav/>
+        {/* <Nav/> */}
     
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 p-6 md:p-8">
         
