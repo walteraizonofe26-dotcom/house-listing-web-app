@@ -66,6 +66,7 @@ export default function Nav() {
         <Link href="#"><li>FIND AGENT</li></Link>
         <Link href="#"><li>NEWS & ADVICES</li></Link>
         <Link href="#"><li>CONTACT US</li></Link>
+        <Link href="/cart"><li>WISHLIST</li></Link>
     </ul>
   </div>
  </div>

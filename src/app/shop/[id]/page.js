@@ -1,5 +1,7 @@
 "use client";
 
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -67,6 +69,7 @@ export default function PropertyDetailsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+        <Nav />
       <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 p-6 md:p-8">
         
         {/* Top Header / Agent Info Bars */}
@@ -320,6 +323,7 @@ export default function PropertyDetailsPage() {
 
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
