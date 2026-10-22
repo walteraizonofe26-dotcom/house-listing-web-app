@@ -19,7 +19,7 @@ function getList(result) {
     result?.agents,
     result?.items,
   ];
-
+ 
   for (const value of candidates) {
     if (Array.isArray(value)) return value;
     if (Array.isArray(value?.data)) return value.data;
