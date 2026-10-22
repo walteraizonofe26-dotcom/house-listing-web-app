@@ -8,9 +8,9 @@ import { FaHouseUser } from "react-icons/fa";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 
-import { mockProperties } from "@/data/mockProperties";
 
-const USE_MOCK = true; // set to false when the API is working
+
+
 
 
 export default function Shop(){
@@ -24,11 +24,7 @@ useEffect(() => {
   
   const getProperties = async () => {
 
-    if (USE_MOCK) {
-    setProperties(mockProperties);
-    setLoading(false);
-    return;
-  }
+    
     try {
       const tokenResp = await fetch("https://property.reworkstaging.name.ng/v1/token", {
         method: "POST",
