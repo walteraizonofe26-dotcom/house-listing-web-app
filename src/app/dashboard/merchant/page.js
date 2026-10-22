@@ -7,13 +7,13 @@ import Link from "next/link";
 
 const API = "http://property.reworkstaging.name.ng/v1";
 
+
 const PROPERTIES_PAGE = "/dashboard/merchant/all-properties";
 const AGENTS_PAGE = "/dashboard/merchant/agents";
 const APPOINTMENTS_PAGE = "/dashboard/appointments";
 const MANAGE_PROPERTIES_PAGE = "/dashboard/merchant/properties";
 const VERIFY_PROPERTIES_PAGE = "/dashboard/merchant/verify-properties";
 
-// Get an ID from different API response formats.
 function getId(value) {
   if (!value) return "";
 
@@ -107,7 +107,6 @@ function getAgentId(agent) {
   });
 }
 
-// Extract arrays from common API response structures.
 function getList(result, preferredKey = "") {
   if (Array.isArray(result)) return result;
   if (!result || typeof result !== "object") return [];
@@ -288,7 +287,6 @@ function isPropertyVerified(property) {
   );
 }
 
-// Merge duplicate records using their property IDs.
 function mergeProperties(...groups) {
   const unique = new Map();
 
@@ -321,8 +319,7 @@ function mergeProperties(...groups) {
 
       const merged = { ...existing, ...property };
 
-      // Do not lose a verified record when a duplicate pending
-      // record is returned by another endpoint.
+
       if (wasVerified && !incomingVerified) {
         merged.is_verified = existing.is_verified;
         merged.verified = existing.verified;
@@ -330,11 +327,9 @@ function mergeProperties(...groups) {
           existing.verification_status;
         merged.status = existing.status;
       }
-
       unique.set(key, merged);
     }
   }
-
   return Array.from(unique.values());
 }
 
@@ -356,11 +351,8 @@ function money(value) {
   if (value === null || value === undefined || value === "") {
     return "Price unavailable";
   }
-
   const amount = Number(value);
-
   if (!Number.isFinite(amount)) return "Price unavailable";
-
   return `₦${amount.toLocaleString("en-NG")}`;
 }
 
@@ -735,12 +727,7 @@ export default function MerchantDashboard() {
         {/* Sidebar */}
         <aside className="hidden w-64 shrink-0 flex-col bg-slate-950 text-white md:flex">
           <div className="border-b border-slate-800 px-6 py-7">
-            <Link
-              href="/dashboard/merchant"
-              className="text-2xl font-bold"
-            >
-              Home<span className="text-emerald-400">Find</span>
-            </Link>
+           
             <p className="mt-2 text-xs text-slate-400">
               Merchant dashboard
             </p>
