@@ -1,1484 +1,681 @@
-<<<<<<< HEAD
-
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-=======
-import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
-import { FaLongArrowAltRight } from "react-icons/fa";
-import { FaArrowLeftLong } from "react-icons/fa6";
-// import Shop from "../app/shop_page/page";
-import { FaHouseUser } from "react-icons/fa";
-import { IoHome } from "react-icons/io5";
-import { FaBookOpen } from "react-icons/fa";
-import { MdPriceChange } from "react-icons/md";
-import Link from "next/link";
 
-export default function Home() {
-  return (
-    <div>
-      <Nav />
-      <section className="px-40 text-center relative bg-cover bg-center bg-no-repeat h-[350px] py-10" style={{ backgroundImage: `url('/hero.jpg')` }}  >
-        <div className="text-4xl pb-2 text-white">FIND YOUR DREAM HOME.</div>
-        <p className="pb-3 text-white">There are millions of home out there. Let's find the one that's the perfect one for you.  </p>
-        <div className="bg-gray-600 align-center  justify-self-center px-10 py-10">
-          <div className="flex justify-items-center pt-2 gap-2 align-center px-6">
-            <div className="bg-black text-white px-10"><Link href="/shop_page"><h4>BUY</h4></Link></div>
-            <div className="bg-black text-white px-10"><Link href="/shop_page"><h4>RENT</h4></Link></div>
-            <div className="bg-black text-white px-10"><Link href="/shop_page"><h4>SHORT LET</h4></Link></div>
-            <div className="bg-black text-white px-10"><Link href="/shop_page"><h4>PROJECTS</h4></Link></div>
-          </div>
-          <div className="flex p-4 gap-3">
-          <input type="text" placeholder="Pls enter Area, Town, State" className="flex-1 p-3 rounded-sm outline-none bg-white"/>
-          <button className="bg-red-600 text-white font-semibold px-6 rounded-sm whitespace-nowrap">Search Now</button>
-          </div>
-        </div>
-      </section>
-
-     <section className="bg-gray-100 px-4 py-10 md:px-16 lg:px-24">
-       <div className="mx-auto max-w-7xl border border-gray-200 bg-white p-5 shadow-sm">
-        <div className="border-b border-gray-300">
-          <h2 className="inline-block bg-red-700 px-5 py-3 text-lg text-white">Top Agencies</h2>
-          </div>
-
-        <div className="grid grid-cols-2 gap-8 py-8 md:grid-cols-4 md:gap-5">
-      {[
-        { name: "Breepropertiesng", image: "/firm1.png" },
-        { name: "Dayspring Concept", image: "/firm2.png" },
-        { name: "The MLS Properties", image: "/firm3.png" },
-        { name: "Ramos of Lagos Realty Ltd", image: "/firm4.png" },
-      ].map((firm) => (
-        <div
-          key={firm.name}
-          className="flex flex-col items-center gap-5"
-        >
-          <div className="flex h-36 w-36 items-center justify-center overflow-hidden rounded-full border border-gray-200 bg-white shadow-md">
-            <img
-              src={firm.image}
-              alt={firm.name}
-              className="h-full w-full object-contain"
-            />
-          </div>
-
-          <h3 className="text-center text-base text-red-500">
-            {firm.name}
-          </h3>
-        </div>
-      ))}
-    </div>
-     <div className="flex items-center justify-center gap-6 pb-5 text-gray-800">
-      <button className="font-semibold hover:text-red-600">1</button>
-      <button className="hover:text-red-600">2</button>
-      <button className="hover:text-red-600">3</button>
-    </div>
-
-    <div className="flex items-center justify-center gap-5 text-red-600">
-      <button aria-label="Previous agencies" className="hover:text-red-800">
-        <FaArrowLeftLong size={20} />
-      </button>
-      <button aria-label="Next agencies" className="hover:text-red-800">
-        <FaLongArrowAltRight size={20} />
-      </button>
-    </div>
-
-    <div className="mt-6 flex justify-center">
-      <button className="rounded bg-red-700 px-8 py-3 font-semibold text-white hover:bg-red-800">
-        View All
-      </button>
-    </div>
-
-  </div>
-     </section>
-     {/* <Shop/> */}
-
-     <section className="bg-gray-100 px-4 py-10 md:px-16 lg:px-24">
-       <div className="mx-auto max-w-7xl border border-gray-200 bg-white p-5 shadow-sm text-center">
-        <h1 className="text-2xl font-bold text-gray-800">What Makes NaijaHouses The Preferred Choice</h1>
-
-      </div>
-      <div className="grid grid-cols-3  ">
-         <div className="text-center border border-gray-200 bg-white p-5 shadow-sm place-items-center ">
-          <FaHouseUser className="w-94" />
-          <h3 className="text-2xl pb-2">Budget Conscious</h3>
-          <p>We believe everyone should be able to rent a home without breaking the bank. Let us help you find rentals that fit within your budget.</p>
-         </div>
-          <div className="text-center border border-gray-200 bg-white p-5 shadow-sm place-items-center ">
-          <FaHouseUser className="w-94" />
-          <h3 className="text-2xl pb-2">Agents for Your Service</h3>
-          <p>Advice from industry experts to help you make smart property decisions.</p>
-         </div>
-          <div className="text-center border border-gray-200 bg-white p-5 shadow-sm place-items-center ">
-          <FaHouseUser className="w-94" />
-          <h3 className="text-2xl pb-2">Best Price Guarantee</h3>
-          <p>Why compromise? Let's find you a comfortable home where the amenities, appliances and services are all top of the line.</p>
-         </div>
-      </div>
-     </section>
-      <section className="px-40 text-center relative bg-cover bg-center bg-no-repeat h-[700px] py-10" style={{ backgroundImage: `url('/shop.png')` }} >
-        <div  className=" bg-white px-4 py-5 md:px-10 lg:px-15">
-          <h1 className="text-2xl text-center font-bold pt-4 pb-5">Blogs: Latest News & Advice</h1>
-          <div className="grid grid-cols-4 gap-4 ">
-            <div className="bg-gray-100 border border-gray-200 p-4 shadow-sm">
-                 <div className=" shadow-sm">
-                  <img src="/news.png" alt="Blog Image" className="py-4 px-4"/>
-                 </div>
-                 <div className="text-center">
-                  <h3 className="text-red-500 font-bold pb-3">UPDC REIT Records 38% Yield as Nigerian Real Estate Funds End 2025 Strong</h3>
-                  <p className="pb-3">Posted on 02/02/2026 11:00 AM | by NaijaHouses</p>
-                  <p className="pb-2">Nigeria’s real estate mutual funds and Real Estate Investment Trusts (REITs) posted a...</p>
-                  <button className="bg-red-400 text-white px-4 py-2">Read More</button>
-                 </div>
-            </div>
-             <div className="bg-gray-100 border border-gray-200 p-4 shadow-sm">
-                 <div className=" shadow-sm">
-                  <img src="/news.png" alt="Blog Image" className="py-4 px-4"/>
-                 </div>
-                 <div className="text-center">
-                  <h3 className="text-red-500 font-bold pb-3">UPDC REIT Records 38% Yield as Nigerian Real Estate Funds End 2025 Strong</h3>
-                  <p className="pb-3">Posted on 02/02/2026 11:00 AM | by NaijaHouses</p>
-                  <p className="pb-2">Nigeria’s real estate mutual funds and Real Estate Investment Trusts (REITs) posted a...</p>
-                  <button className="bg-red-400 text-white px-4 py-2">Read More</button>
-                 </div>
-            </div>
-             <div className="bg-gray-100 border border-gray-200 p-4 shadow-sm">
-                 <div className=" shadow-sm">
-                  <img src="/news.png" alt="Blog Image" className="py-4 px-4"/>
-                 </div>
-                 <div className="text-center">
-                  <h3 className="text-red-500 font-bold pb-3">UPDC REIT Records 38% Yield as Nigerian Real Estate Funds End 2025 Strong</h3>
-                  <p className="pb-3">Posted on 02/02/2026 11:00 AM | by NaijaHouses</p>
-                  <p className="pb-2">Nigeria’s real estate mutual funds and Real Estate Investment Trusts (REITs) posted a...</p>
-                  <button className="bg-red-400 text-white px-4 py-2">Read More</button>
-                 </div>
-            </div>
-             <div className="bg-gray-100 border border-gray-200 p-4 shadow-sm">
-                 <div className=" shadow-sm">
-                  <img src="/news.png" alt="Blog Image" className="py-4 px-4"/>
-                 </div>
-                 <div className="text-center">
-                  <h3 className="text-red-500 font-bold pb-3">UPDC REIT Records 38% Yield as Nigerian Real Estate Funds End 2025 Strong</h3>
-                  <p className="pb-3">Posted on 02/02/2026 11:00 AM | by NaijaHouses</p>
-                  <p className="pb-2">Nigeria’s real estate mutual funds and Real Estate Investment Trusts (REITs) posted a...</p>
-                  <button className="bg-red-400 text-white px-4 py-2">Read More</button>
-                 </div>
-            </div>
-          </div>
-        </div>
-      </section>
-       <section className="bg-gray-100 px-4 py-10 md:px-16 lg:px-24">
-       <div className="mx-auto max-w-7xl border border-gray-200 bg-white p-5 shadow-sm">
-        <div className="border-b border-gray-300">
-          <h2 className="inline-block bg-red-700 px-5 py-3 text-lg text-white">Top Agents</h2>
-          </div>
-
-        <div className="grid grid-cols-2 gap-8 py-8 md:grid-cols-4 md:gap-5">
-      {[
-        { name: "Breepropertiesng", image: "/firm1.png" },
-        { name: "Dayspring Concept", image: "/firm2.png" },
-        { name: "The MLS Properties", image: "/firm3.png" },
-        { name: "Ramos of Lagos Realty Ltd", image: "/firm4.png" },
-      ].map((firm) => (
-        <div
-          key={firm.name}
-          className="flex flex-col items-center gap-5"
-        >
-          <div className="flex h-36 w-36 items-center justify-center overflow-hidden rounded-full border border-gray-200 bg-white shadow-md">
-            <img
-              src={firm.image}
-              alt={firm.name}
-              className="h-full w-full object-contain"
-            />
-          </div>
-
-          <h3 className="text-center text-base text-red-500">
-            {firm.name}
-          </h3>
-        </div>
-      ))}
-    </div>
-     
-    <div className="mt-6 flex justify-center">
-      <button className="rounded bg-red-700 px-8 py-3 font-semibold text-white hover:bg-red-800">
-        View All
-      </button>
-    </div>
-
-  </div>
-     </section>
-     <section className="px-40 text-center relative bg-cover bg-center bg-no-repeat h-[350px] py-10" style={{ backgroundImage: `url('/buq.jpg')` }}>
-      <p className="text-2xl font-bold text-white pb-4 pt-10">FIND YOUR NEIGHBORHOOD</p>
-      <p className="text-white">
-        Does it have pet-friendly rentals? What are the crime rates? How are the schools? Get important local information on the area you’re most interested in.
-      </p>
-     <div className="flex p-4 gap-3">
-          <input type="text" placeholder="Pls enter Area, Town, State" className="flex-1 p-3 rounded-sm outline-none bg-white"/>
-          <button className="bg-red-600 text-white font-semibold px-6 rounded-sm whitespace-nowrap">Search Local</button>
-      </div>
-     </section>
-     <div className="px-30 pb-5">
-      <div className="grid grid-cols-4 text-center justify-center pt-4">
-           <div className="border border-gray-400 place-items-center shadow-sm ">
-           <IoHome  className="pt-4 w-[40px] h-[40px]"/>
-            <h2 className="pt-2">41</h2>
-            <p className="">State</p>
-           </div>
-            <div className="border border-gray-400 place-items-center shadow-sm ">
-           <FaBookOpen className="pt-4 w-[40px] h-[40px]" />
-            <h2 className="pt-2">77</h2>
-            <p className="">Towns</p>
-           </div>
-            <div className="border border-gray-400 place-items-center shadow-sm ">
-           <IoHome  className="pt-4 w-[40px] h-[40px]"/>
-            <h2 className="pt-2">411</h2>
-            <p className="">Agents</p>
-           </div>
-            <div className="border border-gray-400 place-items-center shadow-sm ">
-         <MdPriceChange className="pt-4 w-[40px] h-[40px]"  />
-            <h2 className="pt-2">61</h2>
-            <p className="">Agencies</p>
-           </div>
-          
-        </div>
-     </div>
-     <section className="bg-black px-15 py-4">
-      <div className="grid grid-cols-2">
-        <div><h1 className="text-white text-3xl text-center justify-content pt-4"> Subscribe To Our Newsletter</h1></div>
-        <div className="flex p-4 gap-3">
-          <input type="text" placeholder="Enter your email" className="flex-1 p-3 rounded-sm outline-none bg-white"/>
-          <button className="bg-red-600 text-white font-semibold px-6 rounded-sm whitespace-nowrap">Subscribe</button>
-      </div>
-      </div>
-     </section>
-     <Footer/>
-    </div>
-      
-  );
-}
->>>>>>> 6cf715743de907002e24e803d63e090b3bb7f855
-
-const API = "http://property.reworkstaging.name.ng/v1";
-
-const PROPERTIES_PAGE = "/dashboard/merchant/all-properties";
-const AGENTS_PAGE = "/dashboard/merchant/agents";
-const APPOINTMENTS_PAGE = "/dashboard/appointments";
-const MANAGE_PROPERTIES_PAGE = "/dashboard/merchant/properties";
-const VERIFY_PROPERTIES_PAGE = "/dashboard/merchant/verify-properties";
-
-// Get an ID from different API response formats.
-function getId(value) {
-  if (!value) return "";
-
-  if (typeof value === "string" || typeof value === "number") {
-    return String(value);
-  }
-
-  return String(
-    value.property_id ||
-      value.propertyId ||
-      value.merchant_id ||
-      value.merchantId ||
-      value.agent_id ||
-      value.agentId ||
-      value.user_id ||
-      value.userId ||
-      value.id ||
-      value._id ||
-      ""
-  );
-}
-
-function getPropertyId(property) {
-  return String(
-    property?.property_id ||
-      property?.propertyId ||
-      property?.id ||
-      property?._id ||
-      ""
-  );
-}
-
-function getAccount(value) {
-  let current = value;
-
-  for (let i = 0; i < 5; i += 1) {
-    if (!current || typeof current !== "object") break;
-
-    if (
-      current.merchant_id ||
-      current.merchantId ||
-      current.agent_id ||
-      current.agentId ||
-      current.id ||
-      current._id
-    ) {
-      return current;
-    }
-
-    current =
-      current.account ||
-      current.merchant ||
-      current.user ||
-      current.data ||
-      current.result;
-  }
-
-  return current && typeof current === "object" ? current : {};
-}
-
-function getSavedUser() {
-  if (typeof window === "undefined") return {};
-
-  try {
-    return getAccount(
-      JSON.parse(localStorage.getItem("account") || "{}")
-    );
-  } catch {
-    return {};
-  }
-}
-
-function getMerchantId(account) {
-  if (typeof window !== "undefined") {
-    const savedId = localStorage.getItem("merchantId");
-    if (savedId) return savedId;
-  }
-
-  return getId({
-    merchant_id: account?.merchant_id,
-    merchantId: account?.merchantId,
-    id: account?.id || account?._id,
-  });
-}
-
-function getAgentId(agent) {
-  return getId({
-    agent_id: agent?.agent_id,
-    agentId: agent?.agentId,
-    id: agent?.id || agent?._id,
-  });
-}
-
-// Extract arrays from common API response structures.
-function getList(result, preferredKey = "") {
-  if (Array.isArray(result)) return result;
-  if (!result || typeof result !== "object") return [];
-
-  const keys = [
-    preferredKey,
-    "properties",
-    "agents",
-    "appointments",
-    "results",
-    "items",
-    "records",
-    "merchants",
-    "data",
-  ].filter(Boolean);
-
-  const visited = new Set();
-  const queue = [result];
-  let emptyArray = null;
-
-  while (queue.length) {
-    const current = queue.shift();
-
-    if (!current || typeof current !== "object") continue;
-    if (visited.has(current)) continue;
-
-    visited.add(current);
-
-    if (Array.isArray(current)) {
-      if (current.length > 0) return current;
-      emptyArray = emptyArray || current;
-      continue;
-    }
-
-    for (const key of keys) {
-      if (Array.isArray(current[key])) {
-        if (current[key].length > 0) return current[key];
-        emptyArray = emptyArray || current[key];
-      }
-    }
-
-    for (const value of Object.values(current)) {
-      if (value && typeof value === "object") {
-        queue.push(value);
-      }
-    }
-  }
-
-  return emptyArray || [];
-}
-
-async function readResponse(response) {
-  const text = await response.text();
-  let result = {};
-
-  try {
-    result = text ? JSON.parse(text) : {};
-  } catch {
-    throw new Error(
-      "The server returned an invalid response. Please try again."
-    );
-  }
-
-  if (!response.ok) {
-    throw new Error(
-      result.msg ||
-        result.message ||
-        `Request failed with status ${response.status}`
-    );
-  }
-
-  if (
-    result.success === false ||
-    result.type === "BAD_REQUEST" ||
-    (typeof result.code === "number" && result.code >= 400)
-  ) {
-    throw new Error(
-      result.msg ||
-        result.message ||
-        "The request was not successful."
-    );
-  }
-
-  return result;
-}
-
-function getPropertyName(property) {
-  return (
-    property?.name ||
-    property?.title ||
-    property?.property_name ||
-    "Unnamed Property"
-  );
-}
-
-function getPropertyImage(property) {
-  const images =
-    property?.images ||
-    property?.image_urls ||
-    property?.photos ||
-    property?.gallery;
-
-  if (Array.isArray(images)) {
-    const first = images[0];
-
-    if (typeof first === "string") return first;
-
-    if (first && typeof first === "object") {
-      return first.url || first.image_url || first.src || "";
-    }
-  }
-
-  return (
-    property?.image_url ||
-    property?.image ||
-    property?.photo ||
-    property?.thumbnail ||
-    ""
-  );
-}
-
-function getRelatedId(value) {
-  if (value === null || value === undefined) return "";
-  if (typeof value === "object") return getId(value);
-  return String(value);
-}
-
-function getPropertyMerchantId(property) {
-  return getRelatedId(
-    property?.merchant_id ??
-      property?.merchantId ??
-      property?.merchant ??
-      property?.owner_id ??
-      property?.ownerId
-  );
-}
-
-function getPropertyAgentId(property) {
-  return getRelatedId(
-    property?.agent_id ??
-      property?.agentId ??
-      property?.agent ??
-      property?.assigned_agent ??
-      property?.assignedAgent
-  );
-}
-
-function isPropertyVerified(property) {
-  if (!property || typeof property !== "object") return false;
-
-  const trueValues = ["true", "1", "yes"];
-
-  const isVerified = String(property.is_verified ?? "")
-    .toLowerCase()
-    .trim();
-
-  const verified = String(property.verified ?? "")
-    .toLowerCase()
-    .trim();
-
-  const verificationStatus = String(
-    property.verification_status ??
-      property.verificationStatus ??
-      ""
-  )
-    .toLowerCase()
-    .trim();
-
-  const status = String(property.status ?? "")
-    .toLowerCase()
-    .trim();
-
-  return (
-    trueValues.includes(isVerified) ||
-    trueValues.includes(verified) ||
-    verificationStatus === "verified" ||
-    status === "verified"
-  );
-}
-
-// Merge duplicate records using their property IDs.
-function mergeProperties(...groups) {
-  const unique = new Map();
-
-  for (const group of groups) {
-    if (!Array.isArray(group)) continue;
-
-    for (const property of group) {
-      if (!property || typeof property !== "object") continue;
-
-      const id = getPropertyId(property);
-
-      const key =
-        id ||
-        [
-          property.name || property.title || "",
-          property.address || "",
-          property.city || "",
-          property.price || "",
-        ].join("|");
-
-      const existing = unique.get(key);
-
-      if (!existing) {
-        unique.set(key, { ...property });
-        continue;
-      }
-
-      const wasVerified = isPropertyVerified(existing);
-      const incomingVerified = isPropertyVerified(property);
-
-      const merged = { ...existing, ...property };
-
-      // Do not lose a verified record when a duplicate pending
-      // record is returned by another endpoint.
-      if (wasVerified && !incomingVerified) {
-        merged.is_verified = existing.is_verified;
-        merged.verified = existing.verified;
-        merged.verification_status =
-          existing.verification_status;
-        merged.status = existing.status;
-      }
-
-      unique.set(key, merged);
-    }
-  }
-
-  return Array.from(unique.values());
-}
-
-function getRecentlyCreatedProperties() {
-  if (typeof window === "undefined") return [];
-
-  try {
-    const saved = JSON.parse(
-      localStorage.getItem("recentlyCreatedProperties") || "[]"
-    );
-
-    return Array.isArray(saved) ? saved : [];
-  } catch {
-    return [];
-  }
-}
-
-function money(value) {
-  if (value === null || value === undefined || value === "") {
-    return "Price unavailable";
-  }
-
-  const amount = Number(value);
-
-  if (!Number.isFinite(amount)) return "Price unavailable";
-
-  return `₦${amount.toLocaleString("en-NG")}`;
-}
-
-function formatDate(value) {
-  if (!value) return "Date not available";
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return "Date not available";
-  }
-
-  return date.toLocaleDateString("en-NG", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
-
-function getAppointmentTitle(appointment) {
-  return (
-    appointment?.property?.name ||
-    appointment?.property_name ||
-    appointment?.title ||
-    appointment?.name ||
-    "Property appointment"
-  );
-}
-
-function getAppointmentStatus(appointment) {
-  return (
-    appointment?.status ||
-    (appointment?.accepted ? "Accepted" : "Pending")
-  );
-}
-
-function StatCard({ title, value, description, icon, color }) {
-  return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-sm font-medium text-slate-500">
-            {title}
-          </p>
-          <p className="mt-3 text-3xl font-bold text-slate-900">
-            {value}
-          </p>
-          <p className="mt-2 text-xs text-slate-500">
-            {description}
-          </p>
-        </div>
-
-        <div
-          className={`flex h-11 w-11 items-center justify-center rounded-xl text-xl ${color}`}
-        >
-          {icon}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function MerchantDashboard() {
+const categories = [
+  { name: "Flats & Apartments", value: "FLAT", icon: "🏢" },
+  { name: "Duplexes", value: "DUPLEX", icon: "🏡" },
+  { name: "Land", value: "LAND", icon: "🌳" },
+  { name: "Shops & Offices", value: "SHOP", icon: "🏬" },
+];
+
+const cities = [
+  {
+    name: "Lagos",
+    description: "Explore properties across Lagos",
+    image:
+      "https://images.unsplash.com/photo-1577948000111-9c970dfe3743?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    name: "Abuja",
+    description: "Find your next home in Abuja",
+    image:
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    name: "Port Harcourt",
+    description: "Discover properties in Port Harcourt",
+    image:
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=800&q=80",
+  },
+];
+
+const properties = [
+  {
+    id: "sample-1",
+    name: "Luxury Family Duplex",
+    location: "Lekki Phase 1, Lagos",
+    price: 85000000,
+    type: "FOR SALE",
+    category: "DUPLEX",
+    beds: 5,
+    baths: 5,
+    area: "450 sqm",
+    image:
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80",
+  },
+  {
+    id: "sample-2",
+    name: "Modern 3 Bedroom Apartment",
+    location: "Victoria Island, Lagos",
+    price: 4500000,
+    type: "FOR RENT",
+    category: "FLAT",
+    beds: 3,
+    baths: 3,
+    area: "180 sqm",
+    image:
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80",
+  },
+  {
+    id: "sample-3",
+    name: "Residential Plot of Land",
+    location: "Ibeju-Lekki, Lagos",
+    price: 12000000,
+    type: "FOR SALE",
+    category: "LAND",
+    beds: 0,
+    baths: 0,
+    area: "600 sqm",
+    image:
+      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80",
+  },
+  {
+    id: "sample-4",
+    name: "Contemporary Family Home",
+    location: "Gwarinpa, Abuja",
+    price: 65000000,
+    type: "FOR SALE",
+    category: "DUPLEX",
+    beds: 4,
+    baths: 4,
+    area: "350 sqm",
+    image:
+      "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1000&q=80",
+  },
+  {
+    id: "sample-5",
+    name: "Furnished Shortlet Apartment",
+    location: "Wuse 2, Abuja",
+    price: 150000,
+    type: "SHORTLET",
+    category: "FLAT",
+    beds: 2,
+    baths: 2,
+    area: "120 sqm",
+    image:
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=80",
+  },
+  {
+    id: "sample-6",
+    name: "Commercial Office Space",
+    location: "Trans Amadi, Port Harcourt",
+    price: 8000000,
+    type: "FOR RENT",
+    category: "SHOP",
+    beds: 0,
+    baths: 2,
+    area: "250 sqm",
+    image:
+      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1000&q=80",
+  },
+];
+
+const formatPrice = (price) =>
+  `₦${Number(price).toLocaleString("en-NG")}`;
+
+export default function HomePage() {
   const router = useRouter();
 
-  const [account, setAccount] = useState({});
-  const [properties, setProperties] = useState([]);
-  const [agents, setAgents] = useState([]);
-  const [appointments, setAppointments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [warning, setWarning] = useState("");
-  const [lastUpdated, setLastUpdated] = useState("");
+  const [keyword, setKeyword] = useState("");
+  const [purpose, setPurpose] = useState("ALL");
+  const [category, setCategory] = useState("ALL");
+  const [mobileMenu, setMobileMenu] = useState(false);
 
-  const loadDashboard = useCallback(async () => {
-    if (typeof window === "undefined") return;
+  const searchProperties = (event) => {
+    event.preventDefault();
 
-    setLoading(true);
-    setError("");
-    setWarning("");
+    const params = new URLSearchParams();
 
-    const token = localStorage.getItem("token");
-    const savedAccount = getSavedUser();
+    if (keyword.trim()) params.set("search", keyword.trim());
+    if (purpose !== "ALL") params.set("type", purpose);
+    if (category !== "ALL") params.set("category", category);
 
-    if (!token || !Object.keys(savedAccount).length) {
-      setLoading(false);
-      router.replace("/login");
-      return;
-    }
+    const query = params.toString();
 
-    const role = String(
-      savedAccount?.role ||
-        savedAccount?.account_type ||
-        localStorage.getItem("role") ||
-        ""
-    ).toLowerCase();
-
-    if (role.includes("agent")) {
-      setLoading(false);
-      router.replace("/dashboard/agent");
-      return;
-    }
-
-    setAccount(savedAccount);
-
-    const merchantId = getMerchantId(savedAccount);
-
-    if (!merchantId) {
-      setError(
-        "Your merchant ID could not be found. Please log out and sign in again."
-      );
-      setLoading(false);
-      return;
-    }
-
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    };
-
-    const warningMessages = [];
-
-    async function fetchPropertyList(url) {
-      const response = await fetch(url, {
-        headers,
-        cache: "no-store",
-      });
-
-      const result = await readResponse(response);
-
-      console.log("PROPERTY REQUEST:", url);
-      console.log("PROPERTY API RESULT:", result);
-
-      return getList(result, "properties");
-    }
-
-    // Fetch an owner's properties using the normal list and
-    // verification filters. Failed filters do not stop other requests.
-    async function fetchOwnedProperties(ownerType, ownerId) {
-      if (!ownerId) return [];
-
-      const urls = [
-        `${API}/properties?${ownerType}=${encodeURIComponent(ownerId)}&limit=100&offset=0`,
-        `${API}/properties?${ownerType}=${encodeURIComponent(ownerId)}&verified=true&limit=100&offset=0`,
-        `${API}/properties?${ownerType}=${encodeURIComponent(ownerId)}&verified=false&limit=100&offset=0`,
-      ];
-
-      const results = await Promise.allSettled(
-        urls.map((url) => fetchPropertyList(url))
-      );
-
-      const successful = results
-        .filter((result) => result.status === "fulfilled")
-        .map((result) => result.value);
-
-      if (successful.length === 0) {
-        console.error(
-          `All property requests failed for ${ownerType}:`,
-          results
-        );
-      }
-
-      return mergeProperties(...successful);
-    }
-
-    try {
-      // 1. Load the merchant's agents.
-      let agentsList = [];
-
-      try {
-        const response = await fetch(
-          `${API}/merchants/agents?offset=0&limit=100`,
-          { headers, cache: "no-store" }
-        );
-
-        const result = await readResponse(response);
-        const returnedAgents = getList(result, "agents");
-
-        agentsList = returnedAgents.filter((agent) => {
-          const relatedMerchantId = getRelatedId(
-            agent?.merchant_id ??
-              agent?.merchantId ??
-              agent?.merchant
-          );
-
-          // Some API responses omit the merchant field.
-          return (
-            !relatedMerchantId ||
-            relatedMerchantId === String(merchantId)
-          );
-        });
-
-        console.log("MERCHANT AGENTS:", agentsList);
-      } catch (agentError) {
-        console.error("Could not load merchant agents:", agentError);
-        warningMessages.push("Agents could not be loaded.");
-      }
-
-      setAgents(agentsList);
-
-      const agentIds = new Set(
-        agentsList.map(getAgentId).filter(Boolean)
-      );
-
-      console.log("MERCHANT ID:", merchantId);
-      console.log("MERCHANT AGENT IDS:", Array.from(agentIds));
-
-      // 2. Load properties assigned directly to the merchant
-      // and properties assigned to each of its agents.
-      const ownerRequests = [
-        fetchOwnedProperties("merchant", merchantId),
-        ...Array.from(agentIds).map((agentId) =>
-          fetchOwnedProperties("agent", agentId)
-        ),
-      ];
-
-      const ownerResults = await Promise.allSettled(ownerRequests);
-
-      const merchantProperties =
-        ownerResults[0]?.status === "fulfilled"
-          ? ownerResults[0].value
-          : [];
-
-      if (ownerResults[0]?.status === "rejected") {
-        console.error(
-          "Could not load merchant properties:",
-          ownerResults[0].reason
-        );
-        warningMessages.push(
-          "Some merchant properties could not be loaded."
-        );
-      }
-
-      const agentProperties = [];
-
-      ownerResults.slice(1).forEach((result) => {
-        if (result.status === "fulfilled") {
-          agentProperties.push(...result.value);
-        } else {
-          console.error(
-            "Could not load an agent's properties:",
-            result.reason
-          );
-        }
-      });
-
-      // 3. Try the general endpoint as an additional source.
-      let generalProperties = [];
-
-      try {
-        generalProperties = await fetchPropertyList(
-          `${API}/properties?limit=100&offset=0`
-        );
-      } catch (propertyError) {
-        console.error(
-          "Could not load the general property list:",
-          propertyError
-        );
-      }
-
-      const relatedGeneralProperties = generalProperties.filter(
-        (property) => {
-          const propertyMerchantId =
-            getPropertyMerchantId(property);
-          const propertyAgentId = getPropertyAgentId(property);
-
-          return (
-            propertyMerchantId === String(merchantId) ||
-            (propertyAgentId && agentIds.has(propertyAgentId))
-          );
-        }
-      );
-
-      // 4. Combine API data and local records, removing duplicates.
-      const localProperties = getRecentlyCreatedProperties();
-
-      const apiProperties = mergeProperties(
-        merchantProperties,
-        agentProperties,
-        relatedGeneralProperties
-      );
-
-      const combinedProperties = mergeProperties(
-        apiProperties,
-        localProperties
-      );
-
-      console.log(
-        "MERCHANT DIRECT PROPERTY COUNT:",
-        merchantProperties.length
-      );
-      console.log(
-        "MERCHANT AGENT PROPERTY COUNT:",
-        mergeProperties(agentProperties).length
-      );
-      console.log("API PROPERTIES:", apiProperties);
-      console.log("LOCAL RECENT PROPERTIES:", localProperties);
-      console.log(
-        "COMBINED MERCHANT PROPERTIES:",
-        combinedProperties
-      );
-      console.log(
-        "TOTAL PROPERTY COUNT:",
-        combinedProperties.length
-      );
-      console.log(
-        "VERIFIED PROPERTY COUNT:",
-        combinedProperties.filter(isPropertyVerified).length
-      );
-
-      setProperties(combinedProperties);
-
-      // 5. Load merchant appointments.
-      try {
-        const response = await fetch(
-          `${API}/appointments?merchant=${encodeURIComponent(
-            merchantId
-          )}&page=0&limit=100`,
-          { headers, cache: "no-store" }
-        );
-
-        const result = await readResponse(response);
-        setAppointments(getList(result, "appointments"));
-      } catch (appointmentError) {
-        console.error(
-          "Could not load appointments:",
-          appointmentError
-        );
-        setAppointments([]);
-        warningMessages.push("Appointments could not be loaded.");
-      }
-
-      setWarning(warningMessages.join(" "));
-      setLastUpdated(new Date().toLocaleTimeString());
-    } catch (dashboardError) {
-      console.error("Merchant dashboard error:", dashboardError);
-
-      setError(
-        dashboardError.message ||
-          "Unable to load the merchant dashboard. Please refresh."
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, [router]);
-
-  useEffect(() => {
-    loadDashboard();
-  }, [loadDashboard]);
-
-  function handleLogout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("account");
-    localStorage.removeItem("role");
-    localStorage.removeItem("merchantId");
-    router.replace("/login");
-  }
-
-  const verifiedCount = properties.filter(isPropertyVerified).length;
-  const recentProperties = properties.slice(0, 5);
-  const recentAppointments = appointments.slice(0, 4);
-
-  const merchantName =
-    account?.full_name ||
-    account?.name ||
-    account?.company ||
-    "Merchant";
+    router.push(query ? `/All-property?${query}` : "/All-property");
+  };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800">
-      <div className="flex min-h-screen">
-        {/* Sidebar */}
-        <aside className="hidden w-64 shrink-0 flex-col bg-slate-950 text-white md:flex">
-          <div className="border-b border-slate-800 px-6 py-7">
-            <Link
-              href="/dashboard/merchant"
-              className="text-2xl font-bold"
-            >
-              Home<span className="text-emerald-400">Find</span>
+    <main className="min-h-screen bg-white text-gray-800">
+      {/* NAVIGATION */}
+      <header className="sticky top-0 z-50 border-b bg-white shadow-sm">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <Link href="/" className="text-2xl font-extrabold text-emerald-700">
+            HomeFind<span className="text-orange-500">.</span>
+          </Link>
+
+          <div className="hidden items-center gap-7 md:flex">
+            <Link href="/" className="font-medium text-emerald-700">
+              Home
             </Link>
-            <p className="mt-2 text-xs text-slate-400">
-              Merchant dashboard
+            <Link
+              href="/All-property"
+              className="font-medium hover:text-emerald-700"
+            >
+              Properties
+            </Link>
+            <Link
+              href="/agents"
+              className="font-medium hover:text-emerald-700"
+            >
+              Agents
+            </Link>
+            <Link
+              href="/about"
+              className="font-medium hover:text-emerald-700"
+            >
+              About Us
+            </Link>
+            <Link
+              href="/contact"
+              className="font-medium hover:text-emerald-700"
+            >
+              Contact
+            </Link>
+            <Link
+              href="/book-appointment"className="font-medium hover:text-emerald-700">Book Appointment</Link>
+          </div>
+
+          <div className="hidden items-center gap-3 md:flex">
+            <Link
+              href="/login"
+              className="rounded-lg px-4 py-2 font-semibold hover:bg-gray-100"
+            >
+              Login
+            </Link>
+            <Link
+              href="/register"
+              className="rounded-lg bg-emerald-700 px-5 py-2.5 font-semibold text-white hover:bg-emerald-800"
+            >
+              Get Started
+            </Link>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setMobileMenu(!mobileMenu)}
+            className="rounded-lg border px-3 py-2 text-xl md:hidden"
+            aria-label="Toggle navigation menu"
+          >
+            {mobileMenu ? "✕" : "☰"}
+          </button>
+        </nav>
+
+        {mobileMenu && (
+          <div className="space-y-1 border-t bg-white px-4 py-3 md:hidden">
+            <Link
+              href="/"
+              className="block rounded-lg px-3 py-2 hover:bg-gray-100"
+              onClick={() => setMobileMenu(false)}
+            >
+              Home
+            </Link>
+            <Link
+              href="/All-property"
+              className="block rounded-lg px-3 py-2 hover:bg-gray-100"
+              onClick={() => setMobileMenu(false)}
+            >
+              Properties
+            </Link>
+            <Link
+              href="/agents"
+              className="block rounded-lg px-3 py-2 hover:bg-gray-100"
+              onClick={() => setMobileMenu(false)}
+            >
+              Agents
+            </Link>
+            <Link
+              href="/about"
+              className="block rounded-lg px-3 py-2 hover:bg-gray-100"
+              onClick={() => setMobileMenu(false)}
+            >
+              About Us
+            </Link>
+            <Link
+              href="/contact"
+              className="block rounded-lg px-3 py-2 hover:bg-gray-100"
+              onClick={() => setMobileMenu(false)}
+            >
+              Contact
+            </Link>
+            <Link
+              href="/book-appointment"
+              className="block rounded-lg px-3 py-2 hover:bg-gray-100"
+              onClick={() => setMobileMenu(false)}>Book Appointment</Link>
+            <Link
+              href="/login"
+              className="block rounded-lg px-3 py-2 hover:bg-gray-100"
+              onClick={() => setMobileMenu(false)}
+            >
+              Login
+            </Link>
+            <Link
+              href="/register"
+              className="block rounded-lg px-3 py-2 font-semibold text-emerald-700 hover:bg-gray-100"
+              onClick={() => setMobileMenu(false)}
+            >
+              Create Account
+            </Link>
+          </div>
+        )}
+      </header>
+
+      {/* HERO */}
+      <section className="relative isolate overflow-hidden bg-gray-900">
+        <div
+          className="absolute inset-0 -z-20 bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2000&q=85')",
+          }}
+        />
+        <div className="absolute inset-0 -z-10 bg-gray-950/65" />
+
+        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:py-36">
+          <div className="max-w-3xl">
+            <p className="mb-5 inline-block rounded-full bg-white/15 px-4 py-2 text-sm font-semibold text-white">
+              Find a place to call home
             </p>
-          </div>
 
-          <div className="border-b border-slate-800 px-6 py-5">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-500 font-bold text-white">
-              {merchantName.charAt(0).toUpperCase()}
-            </div>
-            <p className="mt-3 font-semibold">{merchantName}</p>
-            <p className="mt-1 truncate text-xs text-slate-400">
-              {account?.email || "Merchant account"}
+            <h1 className="text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl">
+              Discover Your
+              <span className="block text-emerald-300">
+                Perfect Property
+              </span>
+            </h1>
+
+            <p className="mt-6 max-w-2xl text-base leading-7 text-gray-200 sm:text-lg">
+              Explore houses, apartments, land and commercial properties
+              across Nigeria. Your next property is just a few clicks away.
             </p>
-          </div>
 
-          <nav className="flex-1 space-y-2 px-4 py-6">
-            <Link
-              href="/dashboard/merchant"
-              className="flex items-center gap-3 rounded-xl bg-emerald-500/15 px-4 py-3 font-medium text-emerald-300"
+            <form
+              onSubmit={searchProperties}
+              className="mt-10 grid gap-3 rounded-2xl bg-white p-4 shadow-xl sm:grid-cols-2 lg:grid-cols-4"
             >
-              <span>▦</span> Overview
-            </Link>
-
-            <Link
-              href={MANAGE_PROPERTIES_PAGE}
-              className="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition hover:bg-slate-800 hover:text-white"
-            >
-              <span>⌂</span> Manage Properties
-            </Link>
-
-            <Link
-              href={PROPERTIES_PAGE}
-              className="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition hover:bg-slate-800 hover:text-white"
-            >
-              <span>▤</span> View All Properties
-            </Link>
-
-            <Link
-              href={AGENTS_PAGE}
-              className="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition hover:bg-slate-800 hover:text-white"
-            >
-              <span>♙</span> Manage Agents
-            </Link>
-
-            <Link
-              href={APPOINTMENTS_PAGE}
-              className="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition hover:bg-slate-800 hover:text-white"
-            >
-              <span>▦</span> Appointments
-            </Link>
-
-            <Link
-              href={VERIFY_PROPERTIES_PAGE}
-              className="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition hover:bg-slate-800 hover:text-white"
-            >
-              <span>✓</span> Verify Properties
-            </Link>
-          </nav>
-
-          <div className="border-t border-slate-800 p-4">
-            <button
-              onClick={handleLogout}
-              className="w-full rounded-xl px-4 py-3 text-left text-slate-300 transition hover:bg-red-500/10 hover:text-red-300"
-            >
-              ↪ Sign Out
-            </button>
-          </div>
-        </aside>
-
-        {/* Main content */}
-        <main className="min-w-0 flex-1">
-          <header className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white px-5 py-5 sm:px-8">
-            <div>
-              <p className="text-sm text-slate-500">
-                Merchant / Overview
-              </p>
-              <h1 className="mt-1 text-2xl font-bold text-slate-900">
-                Dashboard
-              </h1>
-              <p className="mt-1 text-sm text-slate-500">
-                Welcome back, {merchantName}.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                onClick={loadDashboard}
-                disabled={loading}
-                className="rounded-xl border border-slate-200 bg-green-400 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-green-300 disabled:opacity-50"
-              >
-                {loading ? "Refreshing..." : "↻ Refresh"}
-              </button>
-
-              <Link
-                href="/dashboard/merchant/add-property"
-                className="rounded-xl border border-slate-200 bg-green-400 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-green-300"
-              >
-                Add Property
-              </Link>
-
-              <button
-                onClick={handleLogout}
-                className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-100 md:hidden"
-              >
-                Sign Out
-              </button>
-            </div>
-          </header>
-
-          <div className="space-y-8 p-5 sm:p-8">
-            {error && (
-              <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-                <p className="font-semibold">Dashboard error</p>
-                <p className="mt-1">{error}</p>
-                <button
-                  onClick={loadDashboard}
-                  className="mt-3 font-semibold underline"
+              <div className="sm:col-span-2 lg:col-span-1">
+                <label
+                  htmlFor="keyword"
+                  className="mb-1 block text-sm font-semibold text-gray-700"
                 >
-                  Try again
+                  Location or keyword
+                </label>
+                <input
+                  id="keyword"
+                  type="text"
+                  value={keyword}
+                  onChange={(event) => setKeyword(event.target.value)}
+                  placeholder="e.g. Lekki, Lagos"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-3 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="purpose"
+                  className="mb-1 block text-sm font-semibold text-gray-700"
+                >
+                  Property purpose
+                </label>
+                <select
+                  id="purpose"
+                  value={purpose}
+                  onChange={(event) => setPurpose(event.target.value)}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-3 outline-none focus:border-emerald-600"
+                >
+                  <option value="ALL">Any purpose</option>
+                  <option value="RENT">For rent</option>
+                  <option value="SALES">For sale</option>
+                  <option value="LEASE">For lease</option>
+                  <option value="SHORTLET">Shortlet</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="category"
+                  className="mb-1 block text-sm font-semibold text-gray-700"
+                >
+                  Property type
+                </label>
+                <select
+                  id="category"
+                  value={category}
+                  onChange={(event) => setCategory(event.target.value)}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-3 outline-none focus:border-emerald-600"
+                >
+                  <option value="ALL">All types</option>
+                  <option value="FLAT">Flat / Apartment</option>
+                  <option value="DUPLEX">Duplex</option>
+                  <option value="LAND">Land</option>
+                  <option value="SHOP">Shop / Office</option>
+                  <option value="WAREHOUSE">Warehouse</option>
+                </select>
+              </div>
+
+              <div className="flex items-end">
+                <button
+                  type="submit"
+                  className="w-full rounded-lg bg-emerald-700 px-5 py-3 font-bold text-white transition hover:bg-emerald-800"
+                >
+                  Search Properties
                 </button>
               </div>
-            )}
+            </form>
 
-            {warning && !error && (
-              <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-                {warning}
-              </div>
-            )}
+            <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm text-white">
+              <span>✓ Homes for every budget</span>
+              <span>✓ Multiple Nigerian cities</span>
+              <span>✓ Simple property discovery</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            {lastUpdated && !loading && (
-              <p className="text-xs text-slate-400">
-                Last refreshed at {lastUpdated}
+      {/* CATEGORIES */}
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mb-8 text-center">
+          <p className="font-bold uppercase tracking-widest text-emerald-700">
+            Browse by category
+          </p>
+          <h2 className="mt-2 text-3xl font-extrabold sm:text-4xl">
+            What Are You Looking For?
+          </h2>
+          <p className="mt-3 text-gray-600">
+            Find the right kind of property for your needs.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {categories.map((item) => (
+            <Link
+              key={item.value}
+              href={`/All-properties?category=${encodeURIComponent(item.value)}`}
+              className="rounded-2xl border border-gray-200 p-6 text-center transition hover:-translate-y-1 hover:border-emerald-600 hover:shadow-lg"
+            >
+              <span className="text-4xl">{item.icon}</span>
+              <h3 className="mt-4 font-bold">{item.name}</h3>
+              <p className="mt-2 text-sm text-gray-500">
+                Explore properties
               </p>
-            )}
+            </Link>
+          ))}
+        </div>
+      </section>
 
-            {/* Statistics */}
-            <section>
-              <div className="mb-5">
-                <h2 className="text-lg font-bold text-slate-900">
-                  Overview
-                </h2>
-                <p className="mt-1 text-sm text-slate-500">
-                  Summary of your properties and activities
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <StatCard
-                  title="Total Properties"
-                  value={loading ? "…" : properties.length}
-                  description="Properties found for your account"
-                  icon="⌂"
-                  color="bg-emerald-100 text-emerald-700"
-                />
-
-                <StatCard
-                  title="Verified Properties"
-                  value={loading ? "…" : verifiedCount}
-                  description="Properties marked as verified"
-                  icon="✓"
-                  color="bg-blue-100 text-blue-700"
-                />
-
-                <StatCard
-                  title="Total Agents"
-                  value={loading ? "…" : agents.length}
-                  description="Agents linked to your account"
-                  icon="♙"
-                  color="bg-violet-100 text-violet-700"
-                />
-
-                <StatCard
-                  title="Appointments"
-                  value={loading ? "…" : appointments.length}
-                  description="Appointments returned by the API"
-                  icon="▦"
-                  color="bg-amber-100 text-amber-700"
-                />
-              </div>
-            </section>
-
-            {/* Recent Properties */}
-            <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-5 py-5 sm:px-6">
-                <div>
-                  <h2 className="font-bold text-slate-900">
-                    Recent Properties
-                  </h2>
-                  <p className="mt-1 text-sm text-slate-500">
-                    Showing up to five properties from your list
-                  </p>
-                </div>
-
-                <Link
-                  href={PROPERTIES_PAGE}
-                  className="text-sm font-semibold text-emerald-700 hover:text-emerald-800"
-                >
-                  View all properties →
-                </Link>
-              </div>
-
-              {loading ? (
-                <div className="p-10 text-center text-sm text-slate-500">
-                  Loading properties...
-                </div>
-              ) : recentProperties.length === 0 ? (
-                <div className="p-10 text-center">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-2xl">
-                    ⌂
-                  </div>
-                  <h3 className="mt-4 font-semibold text-slate-900">
-                    No properties found
-                  </h3>
-                  <p className="mt-2 text-sm text-slate-500">
-                    No property records were returned for this account.
-                  </p>
-                  <Link
-                    href={MANAGE_PROPERTIES_PAGE}
-                    className="mt-4 inline-block rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700"
-                  >
-                    Manage Properties
-                  </Link>
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full min-w-[650px] text-left">
-                    <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
-                      <tr>
-                        <th className="px-6 py-4 font-semibold">
-                          Property
-                        </th>
-                        <th className="px-6 py-4 font-semibold">
-                          Location
-                        </th>
-                        <th className="px-6 py-4 font-semibold">
-                          Type
-                        </th>
-                        <th className="px-6 py-4 font-semibold">
-                          Price
-                        </th>
-                        <th className="px-6 py-4 font-semibold">
-                          Status
-                        </th>
-                      </tr>
-                    </thead>
-
-                    <tbody className="divide-y divide-slate-100">
-                      {recentProperties.map((property, index) => {
-                        const image = getPropertyImage(property);
-                        const id = getPropertyId(property);
-                        const verified = isPropertyVerified(property);
-
-                        return (
-                          <tr
-                            key={
-                              id ||
-                              `${getPropertyName(property)}-${index}`
-                            }
-                            className="transition hover:bg-slate-50"
-                          >
-                            <td className="px-6 py-4">
-                              <div className="flex items-center gap-3">
-                                {image ? (
-                                  <img
-                                    src={image}
-                                    alt={getPropertyName(property)}
-                                    className="h-14 w-16 shrink-0 rounded-lg object-cover"
-                                  />
-                                ) : (
-                                  <div className="flex h-14 w-16 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-xl">
-                                    ⌂
-                                  </div>
-                                )}
-
-                                <div className="max-w-56">
-                                  <p className="truncate font-semibold text-slate-900">
-                                    {getPropertyName(property)}
-                                  </p>
-                                  <p className="mt-1 text-xs text-slate-500">
-                                    {property?.category || "Property"}
-                                  </p>
-                                </div>
-                              </div>
-                            </td>
-
-                            <td className="px-6 py-4 text-sm text-slate-600">
-                              {[
-                                property?.city,
-                                property?.state,
-                                property?.country,
-                              ]
-                                .filter(Boolean)
-                                .join(", ") || "Location unavailable"}
-                            </td>
-
-                            <td className="px-6 py-4 text-sm text-slate-600">
-                              {property?.type ||
-                                property?.property_use ||
-                                "—"}
-                            </td>
-
-                            <td className="px-6 py-4 text-sm font-semibold text-slate-900">
-                              {money(property?.price)}
-                            </td>
-
-                            <td className="px-6 py-4">
-                              <span
-                                className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
-                                  verified
-                                    ? "bg-emerald-100 text-emerald-700"
-                                    : "bg-amber-100 text-amber-700"
-                                }`}
-                              >
-                                {verified ? "Verified" : "Pending"}
-                              </span>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </section>
-
-            {/* Agents and appointments */}
-            <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-              <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <div className="flex items-center justify-between border-b border-slate-200 px-5 py-5">
-                  <div>
-                    <h2 className="font-bold text-slate-900">
-                      My Agents
-                    </h2>
-                    <p className="mt-1 text-sm text-slate-500">
-                      Agents associated with your account
-                    </p>
-                  </div>
-
-                  <Link
-                    href={AGENTS_PAGE}
-                    className="text-sm font-semibold text-emerald-700 hover:text-emerald-800"
-                  >
-                    View all →
-                  </Link>
-                </div>
-
-                <div className="divide-y divide-slate-100">
-                  {loading ? (
-                    <p className="p-6 text-sm text-slate-500">
-                      Loading agents...
-                    </p>
-                  ) : agents.length === 0 ? (
-                    <div className="p-6">
-                      <p className="text-sm text-slate-500">
-                        No agents found for this account.
-                      </p>
-                      <Link
-                        href={AGENTS_PAGE}
-                        className="mt-3 inline-block text-sm font-semibold text-emerald-700"
-                      >
-                        Manage agents →
-                      </Link>
-                    </div>
-                  ) : (
-                    agents.slice(0, 5).map((agent, index) => (
-                      <div
-                        key={getAgentId(agent) || index}
-                        className="flex items-center gap-3 px-5 py-4"
-                      >
-                        {agent?.avatar ? (
-                          <img
-                            src={agent.avatar}
-                            alt={agent?.full_name || "Agent"}
-                            className="h-11 w-11 rounded-full object-cover"
-                          />
-                        ) : (
-                          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald-100 font-bold text-emerald-700">
-                            {(agent?.full_name || agent?.name || "A")
-                              .charAt(0)
-                              .toUpperCase()}
-                          </div>
-                        )}
-
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-semibold text-slate-900">
-                            {agent?.full_name ||
-                              agent?.name ||
-                              "Agent"}
-                          </p>
-                          <p className="truncate text-xs text-slate-500">
-                            {agent?.email || "No email provided"}
-                          </p>
-                        </div>
-
-                        <span
-                          className={`rounded-full px-2.5 py-1 text-xs font-medium ${
-                            agent?.is_verified
-                              ? "bg-emerald-100 text-emerald-700"
-                              : "bg-slate-100 text-slate-600"
-                          }`}
-                        >
-                          {agent?.is_verified ? "Verified" : "Agent"}
-                        </span>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </section>
-
-              <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <div className="flex items-center justify-between border-b border-slate-200 px-5 py-5">
-                  <div>
-                    <h2 className="font-bold text-slate-900">
-                      Recent Appointments
-                    </h2>
-                    <p className="mt-1 text-sm text-slate-500">
-                      Latest appointment activity
-                    </p>
-                  </div>
-
-                  <Link
-                    href={APPOINTMENTS_PAGE}
-                    className="text-sm font-semibold text-emerald-700 hover:text-emerald-800"
-                  >
-                    View all →
-                  </Link>
-                </div>
-
-                <div className="divide-y divide-slate-100">
-                  {loading ? (
-                    <p className="p-6 text-sm text-slate-500">
-                      Loading appointments...
-                    </p>
-                  ) : recentAppointments.length === 0 ? (
-                    <div className="p-6">
-                      <p className="text-sm text-slate-500">
-                        No appointments found.
-                      </p>
-                      <Link
-                        href={APPOINTMENTS_PAGE}
-                        className="mt-3 inline-block text-sm font-semibold text-emerald-700"
-                      >
-                        Manage appointments →
-                      </Link>
-                    </div>
-                  ) : (
-                    recentAppointments.map((appointment, index) => (
-                      <div
-                        key={getId(appointment) || index}
-                        className="flex items-start gap-3 px-5 py-4"
-                      >
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                          ▦
-                        </div>
-
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-semibold text-slate-900">
-                            {getAppointmentTitle(appointment)}
-                          </p>
-                          <p className="mt-1 text-xs text-slate-500">
-                            {formatDate(
-                              appointment?.date ||
-                                appointment?.appointment_date ||
-                                appointment?.created_at
-                            )}
-                          </p>
-                        </div>
-
-                        <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
-                          {getAppointmentStatus(appointment)}
-                        </span>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </section>
+      {/* FEATURED PROPERTIES */}
+      <section className="bg-gray-50 py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div>
+              <p className="font-bold uppercase tracking-widest text-emerald-700">
+                Handpicked listings
+              </p>
+              <h2 className="mt-2 text-3xl font-extrabold sm:text-4xl">
+                Featured Properties
+              </h2>
+              <p className="mt-3 text-gray-600">
+                Explore some example properties from our homepage.
+              </p>
             </div>
 
-            <footer className="pb-2 text-center text-xs text-slate-400">
-              HomeFind Merchant Dashboard
-            </footer>
+            <Link
+              href="/All-property"
+              className="font-bold text-emerald-700 hover:text-emerald-900"
+            >
+              View All Properties →
+            </Link>
           </div>
-        </main>
-      </div>
-    </div>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {properties.map((property) => (
+              <article
+                key={property.id}
+                className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+              >
+                <div className="relative">
+                  <img
+                    src={property.image}
+                    alt={property.name}
+                    className="h-56 w-full object-cover"
+                  />
+                  <span className="absolute left-4 top-4 rounded-md bg-emerald-700 px-3 py-1.5 text-xs font-bold text-white">
+                    {property.type}
+                  </span>
+                </div>
+
+                <div className="p-5">
+                  <p className="text-sm text-gray-500">
+                    📍 {property.location}
+                  </p>
+                  <h3 className="mt-2 text-xl font-bold">{property.name}</h3>
+                  <p className="mt-3 text-2xl font-extrabold text-emerald-700">
+                    {formatPrice(property.price)}
+                    {property.type === "FOR RENT" && (
+                      <span className="text-sm font-normal text-gray-500">
+                        {" "}
+                        / year
+                      </span>
+                    )}
+                    {property.type === "SHORTLET" && (
+                      <span className="text-sm font-normal text-gray-500">
+                        {" "}
+                        / day
+                      </span>
+                    )}
+                  </p>
+
+                  <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t pt-4 text-sm text-gray-600">
+                    {property.beds > 0 && <span>🛏 {property.beds} Beds</span>}
+                    {property.baths > 0 && (
+                      <span>🛁 {property.baths} Baths</span>
+                    )}
+                    <span>📐 {property.area}</span>
+                  </div>
+
+                  <Link
+                    href="/All-properties"
+                    className="mt-5 block rounded-lg border border-emerald-700 px-4 py-3 text-center font-bold text-emerald-700 transition hover:bg-emerald-700 hover:text-white"
+                  >
+                    Explore Properties
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <p className="mt-6 text-center text-sm text-gray-500">
+            These are sample listings for display. They are not fetched from
+            your property API.
+          </p>
+        </div>
+      </section>
+
+      {/* CITIES */}
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mb-8 text-center">
+          <p className="font-bold uppercase tracking-widest text-emerald-700">
+            Explore locations
+          </p>
+          <h2 className="mt-2 text-3xl font-extrabold sm:text-4xl">
+            Find Properties by City
+          </h2>
+          <p className="mt-3 text-gray-600">
+            Start exploring popular property destinations in Nigeria.
+          </p>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          {cities.map((city) => (
+            <Link
+              key={city.name}
+              href={`/All-property?search=${encodeURIComponent(city.name)}`}
+              className="group relative isolate h-72 overflow-hidden rounded-2xl bg-gray-900"
+            >
+              <img
+                src={city.image}
+                alt={city.name}
+                className="absolute inset-0 -z-20 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute bottom-0 p-6 text-white">
+                <h3 className="text-2xl font-extrabold">{city.name}</h3>
+                <p className="mt-2 text-sm text-gray-200">
+                  {city.description}
+                </p>
+                <span className="mt-4 inline-block font-bold">
+                  Explore properties →
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* WHY CHOOSE US */}
+      <section className="bg-emerald-50 py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 text-center">
+            <p className="font-bold uppercase tracking-widest text-emerald-700">
+              Why HomeFind
+            </p>
+            <h2 className="mt-2 text-3xl font-extrabold sm:text-4xl">
+              A Simpler Way to Find Property
+            </h2>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-3">
+            <div className="rounded-2xl bg-white p-7 shadow-sm">
+              <span className="text-4xl">🔎</span>
+              <h3 className="mt-4 text-xl font-bold">Easy Search</h3>
+              <p className="mt-3 leading-7 text-gray-600">
+                Browse listings by location, purpose and property category.
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-white p-7 shadow-sm">
+              <span className="text-4xl">🏠</span>
+              <h3 className="mt-4 text-xl font-bold">More Choices</h3>
+              <p className="mt-3 leading-7 text-gray-600">
+                Discover apartments, family homes, land and commercial spaces.
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-white p-7 shadow-sm">
+              <span className="text-4xl">🤝</span>
+              <h3 className="mt-4 text-xl font-bold">Connect with Agents</h3>
+              <p className="mt-3 leading-7 text-gray-600">
+                Find an agent to help you explore your next property.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* AGENT CTA */}
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-emerald-800 p-8 text-white sm:p-12 lg:flex-row lg:items-center">
+          <div className="max-w-2xl">
+            <p className="font-bold uppercase tracking-widest text-emerald-200">
+              For property professionals
+            </p>
+            <h2 className="mt-3 text-3xl font-extrabold sm:text-4xl">
+              Ready to List Your Property?
+            </h2>
+            <p className="mt-4 leading-7 text-emerald-50">
+              Create an account to get started and manage your property
+              listings.
+            </p>
+          </div>
+
+          <Link
+            href="/register"
+            className="shrink-0 rounded-lg bg-white px-6 py-3.5 font-bold text-emerald-800 transition hover:bg-emerald-50"
+          >
+            Get Started Today →
+          </Link>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="bg-gray-950 text-gray-300">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
+          <div>
+            <Link href="/" className="text-2xl font-extrabold text-white">
+              HomeFind<span className="text-orange-500">.</span>
+            </Link>
+            <p className="mt-4 max-w-xs leading-7 text-gray-400">
+              Helping you discover your next home, land or commercial property
+              across Nigeria.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-bold text-white">Quick Links</h3>
+            <div className="mt-4 space-y-3">
+              <Link href="/" className="block hover:text-white">
+                Home
+              </Link>
+              <Link
+                href="/All-property"
+                className="block hover:text-white"
+              >
+                Properties
+              </Link>
+              <Link href="/agents" className="block hover:text-white">
+                Agents
+              </Link>
+              <Link href="/about" className="block hover:text-white">
+                About Us
+              </Link>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-bold text-white">Your Account</h3>
+            <div className="mt-4 space-y-3">
+              <Link href="/login" className="block hover:text-white">
+                Login
+              </Link>
+              <Link href="/register" className="block hover:text-white">
+                Create Account
+              </Link>
+              <Link href="/wishlist" className="block hover:text-white">
+                My Wishlist
+              </Link>
+              <Link
+                href="/my-appointments"
+                className="block hover:text-white"
+              >
+                My Appointments
+              </Link>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-bold text-white">Contact</h3>
+            <div className="mt-4 space-y-3 text-gray-400">
+              <p>Nigeria</p>
+              <Link
+                href="/contact"
+                className="inline-block text-emerald-300 hover:text-white"
+              >
+                Contact our team →
+              </Link>
+              <Link
+                href="/book-appointment"
+                className="block hover:text-white">Book an Appointment</Link>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-800 px-4 py-5 text-center text-sm text-gray-500">
+          © {new Date().getFullYear()} HomeFind. All rights reserved.
+        </div>
+      </footer>
+    </main>
   );
 }
