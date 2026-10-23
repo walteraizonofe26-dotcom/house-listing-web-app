@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { IoHome } from "react-icons/io5";
 import { FaBookOpen } from "react-icons/fa";
 import { MdPriceChange } from "react-icons/md";
-import { FaHouseUser } from "react-icons/fa";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 
@@ -26,22 +25,50 @@ useEffect(() => {
 
     
     try {
-      const tokenResp = await fetch("https://property.reworkstaging.name.ng/v1/token", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: "d@g.com" }),
-      });
-      const tokenData = await tokenResp.json();
-      const token = tokenData.token || tokenData.data?.token || tokenData.access_token;
-      if (!tokenResp.ok || !token) throw new Error("Failed to get token");
+     const tokenResp = await fetch(
+  "http://property.reworkstaging.name.ng/v1/token",
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: "d@g.com" }),
+  }
+);
 
-      const resp = await fetch("https://property.reworkstaging.name.ng/v1/properties", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+const tokenData = await tokenResp.json();
+const token = tokenData.data?.access_token;
+
+if (!tokenResp.ok || !token) {
+  throw new Error("Failed to get token");
+}
+const resp = await fetch(
+  "http://property.reworkstaging.name.ng/v1/properties?verified=true",
+  {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  }
+);
       const data = await resp.json();
-      if (!resp.ok) throw new Error("Failed to fetch properties");
 
-      setProperties(Array.isArray(data) ? data : data.data || []);
+console.log("Properties API status:", resp.status);
+console.log("Properties API response:", data);
+
+if (!resp.ok) {
+  throw new Error("Failed to fetch properties");
+}
+
+const propertyList = Array.isArray(data)
+  ? data
+  : Array.isArray(data.data)
+    ? data.data
+    : Array.isArray(data.data?.properties)
+      ? data.data.properties
+      : Array.isArray(data.properties)
+        ? data.properties
+        : [];
+
+console.log("Properties array:", propertyList);
+
+setProperties(propertyList);
     } catch (err) {
       console.error(err);
       setError("Could not load properties.");
