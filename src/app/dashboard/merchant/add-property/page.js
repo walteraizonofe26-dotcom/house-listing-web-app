@@ -9,7 +9,6 @@ const API = "http://property.reworkstaging.name.ng/v1";
 
 const PROPERTIES_PAGE = "/dashboard/merchant/properties";
 const DASHBOARD_PAGE = "/dashboard/merchant";
-const RECENT_PROPERTIES_KEY = "recentlyCreatedProperties";
 
 const initialForm = {
   name: "",
@@ -32,6 +31,34 @@ const initialForm = {
   agent: "",
 };
 
+async function readResponse(response) {
+  const text = await response.text();
+  let result = {};
+
+  try {
+    result = text ? JSON.parse(text) : {};
+  } catch {
+    throw new Error(
+      "The server returned an invalid response. Please check the API URL."
+    );
+  }
+
+  if (
+    !response.ok ||
+    result?.status === "BAD_REQUEST" ||
+    result?.type === "BAD_REQUEST" ||
+    Number(result?.code) >= 400
+  ) {
+    throw new Error(
+      result?.msg ||
+        result?.message ||
+        `Request failed with status ${response.status}`
+    );
+  }
+
+  return result;
+}
+
 function getPropertyId(property) {
   return (
     property?._id ||
@@ -41,6 +68,7 @@ function getPropertyId(property) {
     property?.data?._id ||
     property?.data?.id ||
     property?.data?.property_id ||
+    property?.data?.propertyId ||
     property?.property?._id ||
     property?.property?.id ||
     ""
@@ -60,7 +88,7 @@ function getResponseProperty(result) {
 function getRecentlyCreatedProperties() {
   try {
     const saved = JSON.parse(
-      localStorage.getItem(RECENT_PROPERTIES_KEY) || "[]"
+      localStorage.getItem("recentlyCreatedProperties") || "[]"
     );
 
     return Array.isArray(saved) ? saved : [];
@@ -71,15 +99,12 @@ function getRecentlyCreatedProperties() {
 
 function getList(result) {
   const candidates = [
-    result?.agents,
+    result,
+    result?.data,
     result?.data?.agents,
-    result?.data?.items,
-    result?.data?.results,
-    result?.data?.data,
+    result?.agents,
     result?.results,
     result?.items,
-    result?.data,
-    result,
   ];
 
   return candidates.find(Array.isArray) || [];
@@ -110,101 +135,6 @@ function getAccountDetails(account) {
   return { user, isMerchant };
 }
 
-async function readResponse(response) {
-  const responseText = await response.text();
-  let result = {};
-
-  try {
-    result = responseText ? JSON.parse(responseText) : {};
-  } catch {
-    throw new Error(
-      "The server returned an invalid response. Please try again."
-    );
-  }
-
-  const isExpired =
-    response.status === 401 ||
-    response.status === 419 ||
-    result?.type === "TOKEN_EXPIRED" ||
-    String(result?.msg || result?.message || "")
-      .toLowerCase()
-      .includes("token") &&
-      String(result?.msg || result?.message || "")
-        .toLowerCase()
-        .includes("expired");
-
-  if (isExpired) {
-    const error = new Error(
-      "Your login session has expired. Please log in again."
-    );
-    error.code = "TOKEN_EXPIRED";
-    throw error;
-  }
-
-  if (
-    !response.ok ||
-    result?.status === "BAD_REQUEST" ||
-    result?.type === "BAD_REQUEST" ||
-    Number(result?.code) >= 400
-  ) {
-    throw new Error(
-      result?.msg ||
-        result?.message ||
-        `Request failed with status ${response.status}`
-    );
-  }
-
-  return result;
-}
-
-function savePropertyLocally(property) {
-  const propertyId = getPropertyId(property);
-
-  if (!propertyId) {
-    throw new Error("Cannot save the property locally because its ID is missing.");
-  }
-
-  const existing = getRecentlyCreatedProperties();
-
-  const updated = [
-    property,
-    ...existing.filter((item) => {
-      const existingId = getPropertyId(item);
-      return String(existingId) !== String(propertyId);
-    }),
-  ];
-
-  localStorage.setItem(
-    RECENT_PROPERTIES_KEY,
-    JSON.stringify(updated)
-  );
-}
-
-function getAgentId(agent) {
-  return (
-    agent?._id ||
-    agent?.id ||
-    agent?.agent_id ||
-    agent?.agentId ||
-    ""
-  );
-}
-
-function getAgentName(agent, index) {
-  const firstName = agent?.first_name || agent?.firstName || "";
-  const lastName = agent?.last_name || agent?.lastName || "";
-  const fullName = `${firstName} ${lastName}`.trim();
-
-  return (
-    agent?.full_name ||
-    agent?.fullName ||
-    agent?.name ||
-    fullName ||
-    agent?.email ||
-    `Agent ${index + 1}`
-  );
-}
-
 export default function AddPropertyPage() {
   const router = useRouter();
 
@@ -225,9 +155,9 @@ export default function AddPropertyPage() {
     async function loadAccount() {
       try {
         const token = localStorage.getItem("token");
-        const savedAccount = localStorage.getItem("account");
+        const saved = localStorage.getItem("account");
 
-        if (!token || !savedAccount) {
+        if (!token || !saved) {
           router.replace("/login");
           return;
         }
@@ -235,14 +165,14 @@ export default function AddPropertyPage() {
         let account;
 
         try {
-          account = JSON.parse(savedAccount);
+          account = JSON.parse(saved);
         } catch {
           throw new Error(
             "Your saved account information is invalid. Please log in again."
           );
         }
 
-        const { isMerchant } = getAccountDetails(account);
+        const { user, isMerchant } = getAccountDetails(account);
 
         if (!active) return;
 
@@ -250,7 +180,7 @@ export default function AddPropertyPage() {
 
         if (!isMerchant) {
           setError(
-            "This page is for merchant accounts. Please use the correct dashboard."
+            "This page is for merchant accounts. Please use the correct dashboard for your account."
           );
           return;
         }
@@ -260,10 +190,9 @@ export default function AddPropertyPage() {
         const response = await fetch(
           `${API}/merchants/agents?offset=0&limit=100`,
           {
-            method: "GET",
             headers: {
               Authorization: `Bearer ${token}`,
-              Accept: "application/json",
+              "Content-Type": "application/json",
             },
             cache: "no-store",
           }
@@ -275,16 +204,11 @@ export default function AddPropertyPage() {
           setAgents(getList(result));
         }
       } catch (err) {
-        if (!active) return;
-
-        setError(
-          err.message ||
-            "Could not load your account or assigned agents."
-        );
-
-        if (err.code === "TOKEN_EXPIRED") {
-          localStorage.removeItem("token");
-          router.replace("/login");
+        if (active) {
+          setError(
+            err.message ||
+              "Could not load your account or available agents."
+          );
         }
       } finally {
         if (active) {
@@ -325,12 +249,9 @@ export default function AddPropertyPage() {
 
   function handleImages(event) {
     const selected = Array.from(event.target.files || []);
-    event.target.value = "";
 
     setError("");
     setMessage("");
-
-    if (selected.length === 0) return;
 
     const allowedTypes = [
       "image/jpeg",
@@ -338,22 +259,30 @@ export default function AddPropertyPage() {
       "image/webp",
     ];
 
-    if (selected.some((file) => !allowedTypes.includes(file.type))) {
+    if (
+      selected.some((file) => !allowedTypes.includes(file.type))
+    ) {
       setError("Please select JPG, PNG, or WEBP images only.");
+      event.target.value = "";
       return;
     }
 
-    if (selected.some((file) => file.size > 5 * 1024 * 1024)) {
+    if (
+      selected.some((file) => file.size > 5 * 1024 * 1024)
+    ) {
       setError("Each image must be 5 MB or smaller.");
+      event.target.value = "";
       return;
     }
 
     if (selected.length + images.length > 10) {
       setError("You can select a maximum of 10 images.");
+      event.target.value = "";
       return;
     }
 
     setImages((previous) => [...previous, ...selected]);
+    event.target.value = "";
   }
 
   function removeImage(index) {
@@ -395,7 +324,7 @@ export default function AddPropertyPage() {
       return;
     }
 
-    if (!form.price || !Number.isFinite(Number(form.price)) || Number(form.price) <= 0) {
+    if (!form.price || Number(form.price) <= 0) {
       setError("Please enter a valid property price.");
       return;
     }
@@ -426,9 +355,6 @@ export default function AddPropertyPage() {
 
     setSaving(true);
 
-    let propertyCreated = false;
-    let createdPropertyId = "";
-
     try {
       const payload = {
         ...form,
@@ -439,20 +365,21 @@ export default function AddPropertyPage() {
         address: form.address.trim(),
         description: form.description.trim(),
         price: Number(form.price),
-        total_area: form.total_area ? Number(form.total_area) : 0,
-        bedroom: Number(form.bedroom || 0),
-        bathroom: Number(form.bathroom || 0),
-        toilet: Number(form.toilet || 0),
-        parking_space: Number(form.parking_space || 0),
+        total_area: form.total_area
+          ? Number(form.total_area)
+          : 0,
+        bedroom: Number(form.bedroom),
+        bathroom: Number(form.bathroom),
+        toilet: Number(form.toilet),
+        parking_space: Number(form.parking_space),
       };
 
-      // Step 1: Create the property through the API.
+      // Step 1: Create the property.
       const response = await fetch(`${API}/properties`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
-          Accept: "application/json",
         },
         body: JSON.stringify(payload),
       });
@@ -463,35 +390,11 @@ export default function AddPropertyPage() {
 
       if (!propertyId) {
         throw new Error(
-          "The API did not return a property ID. Check your merchant properties before trying again, to avoid creating a duplicate."
+          "The API did not return a property ID. Check your properties before trying again to avoid creating a duplicate."
         );
       }
 
-      propertyCreated = true;
-      createdPropertyId = String(propertyId);
-
-      // Step 2: Save the property locally immediately.
-      // This preserves the property details even if image upload fails.
-      const savedProperty = {
-        ...payload,
-        ...(property &&
-        typeof property === "object" &&
-        !Array.isArray(property)
-          ? property
-          : {}),
-        id: propertyId,
-        _id: propertyId,
-        property_id: propertyId,
-        agent: form.agent,
-      };
-
-      try {
-        savePropertyLocally(savedProperty);
-      } catch (storageError) {
-        console.error("Could not save local property copy:", storageError);
-      }
-
-      // Step 3: Upload images to the property's resource endpoint.
+      // Step 2: Upload the selected images.
       const imageData = new FormData();
 
       images.forEach((image) => {
@@ -504,7 +407,6 @@ export default function AddPropertyPage() {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${token}`,
-            Accept: "application/json",
           },
           body: imageData,
         }
@@ -512,64 +414,70 @@ export default function AddPropertyPage() {
 
       const imageResult = await readResponse(imageResponse);
 
-      // Merge returned property details into the local copy if provided.
       const uploadData =
         imageResult?.data?.property ||
-        imageResult?.property ||
         imageResult?.data ||
+        imageResult?.property ||
         {};
 
-      if (
+      const uploadedDetails =
         uploadData &&
         typeof uploadData === "object" &&
         !Array.isArray(uploadData)
-      ) {
-        const updatedProperty = {
-          ...savedProperty,
-          ...uploadData,
-          id: propertyId,
-          _id: propertyId,
-          property_id: propertyId,
-        };
+          ? uploadData
+          : {};
 
-        try {
-          savePropertyLocally(updatedProperty);
-        } catch (storageError) {
-          console.error(
-            "Could not update local property copy:",
-            storageError
-          );
-        }
+      // Step 3: Save a local copy for the properties page.
+      const savedProperty = {
+        ...payload,
+        ...(property &&
+        typeof property === "object" &&
+        !Array.isArray(property)
+          ? property
+          : {}),
+        ...uploadedDetails,
+        id: propertyId,
+        _id: propertyId,
+      };
+
+      try {
+        const previousProperties = getRecentlyCreatedProperties();
+
+        const updatedProperties = [
+          savedProperty,
+          ...previousProperties.filter(
+            (item) =>
+              String(
+                item?.id ||
+                  item?._id ||
+                  item?.property_id ||
+                  item?.propertyId
+              ) !== String(propertyId)
+          ),
+        ];
+
+        localStorage.setItem(
+          "recentlyCreatedProperties",
+          JSON.stringify(updatedProperties)
+        );
+      } catch {
+        console.warn(
+          "The property was saved, but browser storage could not be updated."
+        );
       }
 
       setMessage(
         "Property and images saved successfully. Opening your properties..."
       );
 
+      // Step 4: Navigate to the correct merchant properties page.
       router.push(PROPERTIES_PAGE);
       router.refresh();
     } catch (err) {
-      console.error("Add property error:", err);
-
-      if (err.code === "TOKEN_EXPIRED") {
-        localStorage.removeItem("token");
-        setError("Your session has expired. Please log in again.");
-        router.replace("/login");
-        return;
-      }
-
-      if (propertyCreated) {
-        setError(
-          `Property ${createdPropertyId} was created, but the image upload or final step failed. Check your properties page before trying again, so you do not create a duplicate. Details: ${
-            err.message || "Unknown error"
-          }`
-        );
-      } else {
-        setError(
-          err.message ||
-            "Unable to create the property. Please check your information and try again."
-        );
-      }
+      setError(
+        err.message ||
+          "Unable to save the property. Please check your information and try again."
+      );
     } finally {
       setSaving(false);
     }
@@ -689,7 +597,6 @@ export default function AddPropertyPage() {
                   <option value="RENT">For Rent</option>
                   <option value="LEASE">For Lease</option>
                   <option value="SALES">For Sale</option>
-                  <option value="SHORTLET">Shortlet</option>
                 </select>
               </div>
 
@@ -934,15 +841,24 @@ export default function AddPropertyPage() {
                     </option>
 
                     {agents.map((agent, index) => {
-                      const id = getAgentId(agent);
+                      const id =
+                        agent?._id ||
+                        agent?.id ||
+                        agent?.agent_id ||
+                        agent?.agentId ||
+                        "";
 
-                      if (!id) return null;
+                      const name =
+                        agent?.full_name ||
+                        agent?.name ||
+                        agent?.email ||
+                        `Agent ${index + 1}`;
 
-                      return (
+                      return id ? (
                         <option key={id} value={id}>
-                          {getAgentName(agent, index)}
+                          {name}
                         </option>
-                      );
+                      ) : null;
                     })}
                   </select>
 
