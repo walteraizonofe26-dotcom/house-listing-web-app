@@ -270,7 +270,7 @@ export default function WishlistPage() {
               </h2>
 
               <p className="mx-auto mb-8 max-w-md leading-7 text-gray-600">
-                You haven't saved any properties yet.
+                You haven not saved any properties yet.
                 Explore HomeFind and add the properties you
                 love to your wishlist.
               </p>
